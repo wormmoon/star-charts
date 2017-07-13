@@ -51,7 +51,7 @@ function genConstellation() {
 		var size = 0.5 + Math.random();
 		var star = new Star(position, size);
 		//need to push this info to the empty stars array so it can be used by drawConstellation() function?
-		myConstellation.stars.push([x, y, position, size, star]);
+		myConstellation.stars.push(star);
 	}
 
 	console.log(myConstellation.stars);

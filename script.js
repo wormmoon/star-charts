@@ -29,6 +29,7 @@ function draw() {
 function drawConstellation() {
 	//draw stars
 	for(var i = 0; i < myConstellation.stars.length; i++) {
+		ctx.beginPath();
 		ctx.fillStyle = "#ffffff";
 		ctx.arc(this.x, this.y, this.size, 0, (Math.PI * this.size * 2));
 		ctx.fill();

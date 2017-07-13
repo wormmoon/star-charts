@@ -27,11 +27,12 @@ function draw() {
 }
 
 function drawConstellation() {
+	var star = myConstellation.stars[i];
 	//draw stars
 	for(var i = 0; i < myConstellation.stars.length; i++) {
 		ctx.beginPath();
 		ctx.fillStyle = "#ffffff";
-		ctx.arc(this.x, this.y, this.size, 0, (Math.PI * this.size * 2));
+		ctx.arc(star.position.x, star.position.y, star.size, 0, (Math.PI * star.size * 2));
 		ctx.fill();
 		console.log("drawConstellation has run")
 	}
@@ -55,6 +56,7 @@ function genConstellation() {
 		myConstellation.stars.push(star);
 	}
 
+	console.log("hello");
 	console.log(myConstellation.stars);
 }
 

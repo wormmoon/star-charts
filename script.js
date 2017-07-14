@@ -50,9 +50,8 @@ function genConstellation() {
 		var x = cx - 50 + (Math.floor(Math.random() * 100));
 		var y = cy - 50 + (Math.floor(Math.random() * 100));
 		var position = new Point(x, y);
-		var size = 0.5 + Math.random();
+		var size = 0.5 + (Math.random() * 2); ///////make it so there's less of a chance of the bigger size stars appearing///////
 		var star = new Star(position, size);
-		//need to push this info to the empty stars array so it can be used by drawConstellation() function?
 		myConstellation.stars.push(star);
 	}
 

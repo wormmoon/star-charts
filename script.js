@@ -90,8 +90,11 @@ function genConstellation() {
 		}
 		while (intersection);
 
-		var size = tombola.rangeFloat(0.5, 5); ///////make it so there's less of a chance of the bigger size stars appearing///////
-		
+		var size;
+		if (tombola.percent(25)) {size = tombola.rangeFloat(3.5,5); //Make it so the larger stars are less likely to appear
+		} else {size = tombola.rangeFloat(0.7, 3.4);}
+
+
 		// CREATE STAR//
 		var star = new Star(position, size);
 		myConstellation.stars.push(star);

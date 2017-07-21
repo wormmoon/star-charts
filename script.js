@@ -38,7 +38,9 @@ function drawConstellation() {
 	}
 }
 
-//Generate constellation
+
+
+//GENERATE CONSTELLATION
 function genConstellation() {
 	myConstellation = new Constellation("LYNX");
 
@@ -55,10 +57,11 @@ function genConstellation() {
 
 	//Start at prevPosition and then generate a star at a new position based on prevPosition + a new random x and y value
 	for(var i=0;i<starCount;i++) {
-		var randomx = tombola.rangeFloat(min, max);
-		if (tombola.percent(50)) randomx = -randomx;
-		var randomy = tombola.rangeFloat(min, max);
-		if (tombola.percent(50)) randomy = -randomy;
+		var theta = Math.random() * 360;
+		var randomx = tombola.rangeFloat(min, max) * (Math.cos(theta)); //generates a random distance and a random angle on x axis
+		//if (tombola.percent(50)) randomx = -randomx;
+		var randomy = tombola.rangeFloat(min, max) * (Math.sin(theta));
+		//if (tombola.percent(50)) randomy = -randomy;
 		//This makes first star origin of constellation (cancelling randomisation for the origin)
 		if (i === 0) { 
 			randomx = 0;
@@ -66,7 +69,9 @@ function genConstellation() {
 		}		
 		var position = new Point(prevPosition.x + randomx, prevPosition.y + randomy);
 
-		//Check for intersection
+
+
+		//CHECK FOR LINE INTERSECTION
 		do {
 			//Set intersection to false (if during for loop intersection doesn't return true it will stay false and therefore draw the line(store the line points))
 			var intersection = false;
@@ -95,12 +100,15 @@ function genConstellation() {
 		} else {size = tombola.rangeFloat(0.7, 3.4);}
 
 
+
 		// CREATE STAR//
 		var star = new Star(position, size);
 		myConstellation.stars.push(star);
 
+
+
 		//CREATELINE //
-		if (prevSize === undefined) prevSize === size;
+		if (prevSize === undefined) prevSize = size;
 		var line = new Line(prevPosition.clone(), position.clone(), prevSize, size);
 
 		myConstellation.lines.push(line);
@@ -150,7 +158,7 @@ Line.prototype.draw = function() {
 	ctx.lineWidth = 0.5;
 	ctx.beginPath();
 	ctx.moveTo(this.start.x, this.start.y);
-	ctx.lineTo(this.end.x, this.end.y);
+	ctx.lineTo(this.end.x, this.end.y); //line.end needs to be a random distance * (math.cos/sin(random angle))
 	ctx.stroke();
 };
 

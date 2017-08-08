@@ -66,6 +66,7 @@ function genConstellation() {
 	var prevPosition = new Point(x, y);
 	var prevSize;
 	angle = Math.random() * 360;
+	var counter = 0;
 
 	//Start at prevPosition and then generate a star at a new position based on prevPosition + a new random x and y value
 	for(var i=0;i<starCount;i++) {
@@ -78,6 +79,8 @@ function genConstellation() {
 
 		//CHECK FOR LINE INTERSECTION
 		do {
+			counter++;
+			if (counter > 100) break;
 			//Set intersection to false (if during for loop intersection doesn't return true it will stay false and therefore draw the line(store the line points))
 			var intersection = false;
 			//Check each line for intersection and if true set intersection back to true and return to top of while loop and run again
@@ -87,7 +90,7 @@ function genConstellation() {
 					//Intersection has occurred so this fails the test so it goes back to top of while loop
 					intersection = true;
 					console.log("An intersection has occurred");
-					//break;
+					break;
 				}
 			}
 			if (intersection) {
@@ -105,6 +108,15 @@ function genConstellation() {
 		// CREATE STAR//
 		var star = new Star(position, size);
 		myConstellation.stars.push(star);
+
+		//if unavoidable intersection connect to closest star
+		if (intersection) {
+			var nearest = star.nearest();
+			if (nearest) {
+				star.position = nearest.position;
+				star.size = 0;
+			}
+		}
 
 
 		//CREATELINE //
@@ -189,6 +201,29 @@ Star.prototype.draw = function() {
 	ctx.fill();
 }
 
+Star.prototype.nearest = function() { //finds closest star
+	var star, x1, x2, y1, y2;
+	var smallest = 1000000;
+	var closest = null; //use instead of 0 as we're looking for null or an object (not a number)
+	x1 = this.position.x;
+	y1 = this.position.y;
+	for (i=0; i<myConstellation.stars.length; i++) {
+		star = myConstellation.stars[i];
+		if (star === this) continue;
+		x2 = star.position.x;
+		y2 = star.position.y;
+		var adjacent = Math.abs(x1-x2); //abs always returns positive number
+		var opposite = Math.abs(y1-y2); 
+		var hypotenuse = Math.sqrt((adjacent**2) + (opposite**2));
+		if (hypotenuse < smallest) {
+			closest = star;
+			smallest = hypotenuse;
+		}
+	}
+
+	return closest;
+}
+
 
 
 // we're taking the line between two stars and normalising its vector to calculate the gaps desired at each end of the line when drawn
@@ -226,27 +261,28 @@ function lineIntersect(x1,y1,x2,y2, x3,y3,x4,y4) {
     var y=((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4))/((x1-x2)*(y3-y4)-(y1-y2)*(x3-x4));
     if (isNaN(x)||isNaN(y)) {
         return false;
-    } else {
-        if (x1>=x2) {
-            if (!(x2<=x&&x<=x1)) {return false;}
-        } else {
-            if (!(x1<=x&&x<=x2)) {return false;}
-        }
-        if (y1>=y2) {
-            if (!(y2<=y&&y<=y1)) {return false;}
-        } else {
-            if (!(y1<=y&&y<=y2)) {return false;}
-        }
-        if (x3>=x4) {
-            if (!(x4<=x&&x<=x3)) {return false;}
-        } else {
-            if (!(x3<=x&&x<=x4)) {return false;}
-        }
-        if (y3>=y4) {
-            if (!(y4<=y&&y<=y3)) {return false;}
-        } else {
-            if (!(y3<=y&&y<=y4)) {return false;}
-        }
     }
+
+    if (x1>=x2) {
+        if (!(x2<=x&&x<=x1)) {return false;}
+    } else {
+        if (!(x1<=x&&x<=x2)) {return false;}
+    }
+    if (y1>=y2) {
+        if (!(y2<=y&&y<=y1)) {return false;}
+    } else {
+        if (!(y1<=y&&y<=y2)) {return false;}
+    }
+    if (x3>=x4) {
+        if (!(x4<=x&&x<=x3)) {return false;}
+    } else {
+        if (!(x3<=x&&x<=x4)) {return false;}
+    }
+    if (y3>=y4) {
+        if (!(y4<=y&&y<=y3)) {return false;}
+    } else {
+        if (!(y3<=y&&y<=y4)) {return false;}
+    }
+   
     return true;
 }

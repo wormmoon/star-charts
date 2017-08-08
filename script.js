@@ -1,6 +1,7 @@
 var canvas;
 var ctx;
 var myConstellation;
+var angle;
 
 function init() {
 	console.log('page has loaded...');
@@ -38,6 +39,16 @@ function drawConstellation() {
 	}
 }
 
+// calculate a new angle & position based on the last angle & position, and return them as a new Point object to be used as a star's position
+function calcStarPosition(prevPosition, prevAngle, minDist, maxDist) {
+	angle = tombola.range(prevAngle - 160, prevAngle + 160);
+	//angle = 90;
+	var range = tombola.rangeFloat(minDist, maxDist);
+	var randomx = range * Math.cos(angle * Math.PI/180); //generates a random distance and a random angle on x axis
+	var randomy = range * Math.sin(angle * Math.PI/180);
+	return new Point(prevPosition.x + randomx, prevPosition.y + randomy);
+}
+
 
 
 //GENERATE CONSTELLATION
@@ -50,24 +61,18 @@ function genConstellation() {
 	//randomise the starting position
 	var x = cx; //pick the place to start drawing the constellation 
 	var y = cy;
-	var min = 2; //min distance between stars
+	var min = 20; //min distance between stars
 	var max = 50; //max dist. between stars
 	var prevPosition = new Point(x, y);
 	var prevSize;
+	angle = Math.random() * 360;
 
 	//Start at prevPosition and then generate a star at a new position based on prevPosition + a new random x and y value
 	for(var i=0;i<starCount;i++) {
-		var theta = Math.random() * 360;
-		var randomx = tombola.rangeFloat(min, max) * (Math.cos(theta)); //generates a random distance and a random angle on x axis
-		//if (tombola.percent(50)) randomx = -randomx;
-		var randomy = tombola.rangeFloat(min, max) * (Math.sin(theta));
-		//if (tombola.percent(50)) randomy = -randomy;
-		//This makes first star origin of constellation (cancelling randomisation for the origin)
-		if (i === 0) { 
-			randomx = 0;
-			randomy = 0;
-		}		
-		var position = new Point(prevPosition.x + randomx, prevPosition.y + randomy);
+
+		// create this stars position, by moving from the last star in a direction which is the previous angle +/- some variation 
+		var position = calcStarPosition(prevPosition, angle, min, max);
+		if (i === 0) position = prevPosition.clone();
 
 
 
@@ -78,7 +83,7 @@ function genConstellation() {
 			//Check each line for intersection and if true set intersection back to true and return to top of while loop and run again
 			for(var j = 0; j < myConstellation.lines.length; j++) {
 				var l = myConstellation.lines[j];
-				if (lineIntersect(position.x, position.y, prevPosition.x, prevPosition.y, l.start.x, l.start.y, l.end.x, l.end.y)) {
+				if (lineIntersect(position.x, position.y, prevPosition.x, prevPosition.y, l.noGapStart.x, l.noGapStart.y, l.noGapEnd.x, l.noGapEnd.y)) {
 					//Intersection has occurred so this fails the test so it goes back to top of while loop
 					intersection = true;
 					console.log("An intersection has occurred");
@@ -86,11 +91,7 @@ function genConstellation() {
 				}
 			}
 			if (intersection) {
-				randomx = tombola.rangeFloat(min, max);
-				if (tombola.percent(50)) randomx = -randomx;
-				randomy = tombola.rangeFloat(min, max);
-				if (tombola.percent(50)) randomy = -randomy;
-				position = new Point(prevPosition.x + randomx, prevPosition.y + randomy);
+				position = calcStarPosition(prevPosition, angle, min, max);
 			}
 		}
 		while (intersection);
@@ -104,7 +105,6 @@ function genConstellation() {
 		// CREATE STAR//
 		var star = new Star(position, size);
 		myConstellation.stars.push(star);
-
 
 
 		//CREATELINE //
@@ -151,6 +151,8 @@ function Line(start, end, startRadius, endRadius) {
 	this.startRadius = startRadius;
 	this.endRadius = endRadius;
 	this.calcGaps();
+	this.noGapStart = start;
+	this.noGapEnd = end;
 }
 
 Line.prototype.draw = function() {
@@ -177,9 +179,12 @@ Line.prototype.calcGaps = function() {
 	this.end.y -= endVector.y;
 }
 
+var first = true;
+
 Star.prototype.draw = function() {
 	ctx.beginPath();
-	ctx.fillStyle = "#ffffff";
+	ctx.fillStyle = first? "#ff0000":"#ffffff";
+	first = false;
 	ctx.arc(this.position.x, this.position.y, this.size, 0, (Math.PI * 2));
 	ctx.fill();
 }

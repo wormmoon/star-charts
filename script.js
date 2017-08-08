@@ -41,7 +41,7 @@ function drawConstellation() {
 
 // calculate a new angle & position based on the last angle & position, and return them as a new Point object to be used as a star's position
 function calcStarPosition(prevPosition, prevAngle, minDist, maxDist) {
-	angle = tombola.range(prevAngle - 160, prevAngle + 160);
+	angle = tombola.range(prevAngle - 120, prevAngle + 120);
 	//angle = 90;
 	var range = tombola.rangeFloat(minDist, maxDist);
 	var randomx = range * Math.cos(angle * Math.PI/180); //generates a random distance and a random angle on x axis
@@ -83,7 +83,7 @@ function genConstellation() {
 			//Check each line for intersection and if true set intersection back to true and return to top of while loop and run again
 			for(var j = 0; j < myConstellation.lines.length; j++) {
 				var l = myConstellation.lines[j];
-				if (lineIntersect(position.x, position.y, prevPosition.x, prevPosition.y, l.noGapStart.x, l.noGapStart.y, l.noGapEnd.x, l.noGapEnd.y)) {
+				if (lineIntersect(position.x, position.y, prevPosition.x, prevPosition.y, l.start.x, l.start.y, l.end.x, l.end.y)) {
 					//Intersection has occurred so this fails the test so it goes back to top of while loop
 					intersection = true;
 					console.log("An intersection has occurred");
@@ -150,9 +150,9 @@ function Line(start, end, startRadius, endRadius) {
 	this.end = end;
 	this.startRadius = startRadius;
 	this.endRadius = endRadius;
-	this.calcGaps();
-	this.noGapStart = start;
-	this.noGapEnd = end;
+	//this.calcGaps();
+	//this.noGapStart = start;
+	//this.noGapEnd = end;
 }
 
 Line.prototype.draw = function() {
@@ -164,20 +164,20 @@ Line.prototype.draw = function() {
 	ctx.stroke();
 };
 
-Line.prototype.calcGaps = function() {
-	var startVector = new Vector(this.end.x - this.start.x, this.end.y - this.start.y); //does this need to change?
-	console.log(startVector);
-	startVector.normalise();
-	console.log(startVector);
-	startVector.multiply(4 + this.startRadius); //How can I reference the size of that particular star from within here?
-	var endVector = startVector.clone();
-	endVector.normalise();
-	endVector.multiply(4 + this.endRadius);
-	this.start.x += startVector.x;
-	this.start.y += startVector.y;
-	this.end.x -= endVector.x;
-	this.end.y -= endVector.y;
-}
+//Line.prototype.calcGaps = function() {
+//	var startVector = new Vector(this.end.x - this.start.x, this.end.y - this.start.y); //does this need to change?
+//	console.log(startVector);
+//	startVector.normalise();
+//	console.log(startVector);
+//	startVector.multiply(4 + this.startRadius); //How can I reference the size of that particular star from within here?
+//	var endVector = startVector.clone();
+//	endVector.normalise();
+//	endVector.multiply(4 + this.endRadius);
+//	this.start.x += startVector.x;
+//	this.start.y += startVector.y;
+//	this.end.x -= endVector.x;
+//	this.end.y -= endVector.y;
+//}
 
 var first = true;
 

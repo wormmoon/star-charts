@@ -86,7 +86,7 @@ function genConstellation() {
 			//Check each line for intersection and if true set intersection back to true and return to top of while loop and run again
 			for(var j = 0; j < myConstellation.lines.length; j++) {
 				var l = myConstellation.lines[j];
-				if (lineIntersect(position.x, position.y, prevPosition.x, prevPosition.y, l.start.x, l.start.y, l.end.x, l.end.y)) {
+				if (lineIntersect(position.x, position.y, prevPosition.x, prevPosition.y, l.intersectionStart.x, l.intersectionStart.y, l.intersectionEnd.x, l.intersectionEnd.y)) { //l is a line object
 					//Intersection has occurred so this fails the test so it goes back to top of while loop
 					intersection = true;
 					console.log("An intersection has occurred");
@@ -160,6 +160,8 @@ Point.prototype.clone = function() {
 function Line(start, end, startRadius, endRadius) {
 	this.start = start;  // is a point object
 	this.end = end;
+	this.intersectionStart = start.clone();
+	this.intersectionEnd = end.clone();
 	this.startRadius = startRadius;
 	this.endRadius = endRadius;
 	this.calcGaps();

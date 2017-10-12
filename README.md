@@ -1,4 +1,4 @@
-#Fictional Constellation Map Generator
+# Fictional Constellation Map Generator
 
 This is a Javascript/HTML5 Canvas algorithm to eventually generate a constellation
 map of a fictional sky somewhere. 

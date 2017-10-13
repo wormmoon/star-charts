@@ -1,0 +1,35 @@
+body {
+	font-family: 'Source Sans Pro', sans-serif;
+}
+
+canvas {
+	padding: 0;
+	margin: 50px auto;
+	display: block;
+	width: 500px;
+	height: 500px;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+}
+
+.text-container {
+	width: 600px;
+	margin: auto;
+}
+
+.refresh-button {
+	display: block;
+	width: 250px;
+	margin: 30px auto;
+	border: solid black 3px;
+	text-align: center;
+	text-decoration: none;
+	color: black;
+}
+
+.refresh-button:hover {
+	background-color: #ffe200;
+	cursor: pointer;
+}

@@ -2,17 +2,19 @@ var canvas;
 var ctx;
 var myConstellation;
 var angle;
+var width = 400;
+var height = 400;
 
 function init() {
-	console.log('page has loaded...');
+	// console.log('page has loaded...');
 
 	canvas = document.getElementById("myCanvas");
 	ctx = canvas.getContext("2d");
 
-	canvas.style.width = "500px";
-	canvas.style.height = "500px";
-	canvas.width = 500;
-	canvas.height = 500;
+	// canvas.style.width = "500px";
+	// canvas.style.height = "500px";
+	canvas.width = width;
+	canvas.height = height;
 
 
 	//Generate constellation & then draw
@@ -21,6 +23,5 @@ function init() {
 	draw();
 
 }
-
 
 

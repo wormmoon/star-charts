@@ -21,8 +21,8 @@ Constellation.prototype.generate = function() {
 
 
 	var starCount = tombola.range(4, 10); //How many stars the constellation will contain
-	var cx = 250; //Central point on axis x
-	var cy = 250; //central point on axis y
+	var cx = width/2; //Central point on axis x
+	var cy = height/2; //central point on axis y
 	//randomise the starting position
 	var x = cx; //pick the place to start drawing the constellation 
 	var y = cy;

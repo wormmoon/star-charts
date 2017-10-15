@@ -2,8 +2,8 @@ var canvas;
 var ctx;
 var myConstellation;
 var angle;
-var width = 400;
-var height = 400;
+var width = 450;
+var height = 450;
 
 function init() {
 	// console.log('page has loaded...');

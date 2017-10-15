@@ -6,3 +6,5 @@ map of a fictional sky somewhere.
 At the moment the code generates one constellation, but will generate a few of them
 on the background of a grid and maybe a milky way type object, as well as procedurally
 generated names for each constellation.
+
+See the live project so far here: https://wormmoon.github.io/star-charts/
